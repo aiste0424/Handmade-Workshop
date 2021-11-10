@@ -1,6 +1,7 @@
 #include "Design.h"
 #include "Input.h"
 #include "Screen.h"
+#include "Cuboid.h"
 
 //======================================================================================================
 bool Design::OnEnter()
@@ -71,24 +72,6 @@ bool Design::OnEnter()
 	m_lightShader->BindUniform("material.specular");
 	m_lightShader->BindUniform("material.shininess");
 
-	//m_lightShader->BindUniform("light.attenuationLinear");
-	//m_lightShader->BindUniform("light.attenuationConstant");
-	//m_lightShader->BindUniform("light.attenuationQuadratic");
-
-	//TEST CODE to be used later for multiple lights
-	/*for (size_t i = 0; i < TOTAL_LIGHTS; i++)
-	{
-		std::string index = std::to_string(i);
-
-		m_lightShader->BindUniform("lights[" + index + "].ambient");
-		m_lightShader->BindUniform("lights[" + index + "].diffuse");
-		m_lightShader->BindUniform("lights[" + index + "].specular");
-		m_lightShader->BindUniform("lights[" + index + "].position");
-		m_lightShader->BindUniform("lights[" + index + "].attenuationConstant");
-		m_lightShader->BindUniform("lights[" + index + "].attenuationLinear");
-		m_lightShader->BindUniform("lights[" + index + "].attenuationQuadratic");
-	}*/
-
 	//===================================================================
 
 	Material::Load("Defaults", "Defaults.mtl");
@@ -124,44 +107,16 @@ bool Design::OnEnter()
 	m_axesLabelText->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_axesLabelText->SetString("X");
 
-	//For current testing=======================================================
-
-	/*m_text.push_back(Text("Quikhand", "Quickhand.ttf", 10));
-	m_text.back().SetColor(1.0f, 0.75f, 0.1f);
-	m_text.back().SetString("Text #1");
-
-	m_text.push_back(Text("Quikhand"));
-	m_text.back().SetColor(1.0f, 0.75f, 0.1f);
-	m_text.back().SetString("Text #2");
-
-	m_text.push_back(Text());
-	m_text.back().SetFont("Quickhand");
-	m_text.back().SetColor(1.0f, 0.75f, 0.1f);
-	m_text.back().SetString("Text #3");*/
-
-	/*Audio::Load(Audio::Type::Music, "Test1", "Armin.wav");
-	Audio::Load(Audio::Type::Music, "Test2", "Dance.mp3");
-	Audio::Load(Audio::Type::Music, "Test3", "Journeys.ogg");
-
-	m_audio1 = std::make_unique<Audio>(Audio::Type::Music, "Test1");
-	m_audio2 = std::make_unique<Audio>(Audio::Type::Music, "Test2");
-	m_audio3 = std::make_unique<Audio>(Audio::Type::Music, "Test2");
-
-	m_audio2->Play();*/
-
 	//==========================================================================
 
 	m_light = std::make_unique<Light>(0.0f, 7.5f, 0.0f);
-
-	m_model = std::make_unique<Model>("Teapot", "Teapot.obj", true);
-	//m_model->GetTransform().SetScale(5.0f, 5.0f, 5.0f);
-	//m_model->SetColor(1, 0, 1, 1);
-
-	//m_quad = std::make_unique<Quad>();
-	//m_cube = std::make_unique<Cuboid>();
-	//m_sphere = std::make_unique<Sphere>(10.0f, 50.0f, 50.0f);
+	m_model = std::make_unique<Model>("Gecko", "Gecko.obj", true);
+	m_model->GetTransform().SetScale(10.0f, 10.0f, 10.0f);
+	m_model->SetColor(1, 0, 1, 1);
 
 	//=========================================================================
+
+	m_cuboid = std::make_unique<Cuboid>();
 
 	m_mainCamera = std::make_unique<FreeCamera>();
 	m_mainCamera->SetVelocity(0.0f);
@@ -240,22 +195,20 @@ bool Design::Render()
 	//==============================================================================
 
 	m_grid->Render(mainShader);
+	//m_cuboid->Render(mainShader);
+	m_model->Render(lightShader);
 
 	lightShader.Use();
 	lightShader.SendData("cameraPosition", m_mainCamera->GetTransform().GetPosition());
 
 	m_light->SendToShader(lightShader);
-	m_light->Render(lightShader);
+	//m_light->Render(lightShader);
 	m_mainCamera->SendToShader(lightShader);
 
 	m_axes->GetTransform().SetRotation(m_grid->GetTransform().GetRotation());
+	m_cuboid->GetTransform().SetRotation(m_grid->GetTransform().GetRotation());
+	m_model->GetTransform().SetRotation(m_grid->GetTransform().GetRotation());
 	m_axes->Render(lightShader);
-
-	//m_cube->GetTransform().SetRotation(m_grid->GetTransform().GetRotation());
-	//m_cube->Render(lightShader);
-
-	//m_model->GetTransform().SetRotation(m_grid->GetTransform().GetRotation());
-	//m_model->Render(lightShader);
 
 	//==============================================================================
 	//Text rendering & UI
@@ -297,39 +250,6 @@ bool Design::Render()
 	m_axesLabelText->SendToShader(textShader);
 	m_axesLabelText->SetString("Z");
 	m_axesLabelText->Render(textShader);
-
-	//For current testing
-	/*auto count = 0;
-
-	for (auto& text : m_text)
-	{
-		text.GetTransform().SetPosition(10.0f, (resolution.y - 50.0f - count * 100.0f), 0.0f);
-		text.SendToShader(textShader);
-		text.Render(textShader);
-		count++;
-	}*/
-
-	//m_quad->GetTransform().SetRotation(m_grid->GetTransform().GetRotation());
-	//m_quad->Render(*Shader::Instance());
-
-	//m_sphere->GetTransform().SetRotation(m_grid->GetTransform().GetRotation());
-	//m_sphere->Render(*Shader::Instance());
-
-	//TEST CODE to be used later on
-	/*m_UICamera->SetOrthoView();
-	m_UICamera->Update();
-
-	glm::vec2 pixels = m_mainCamera->ConvertWorldToScreen(m_axes->GetArrowTipPositionX());
-	m_labelX->GetTransform().SetPosition(pixels.x, pixels.y, 0.0f);
-	m_labelX->Render();
-
-	pixels = m_mainCamera->ConvertWorldToScreen(m_axes->GetArrowTipPositionY());
-	m_labelY->GetTransform().SetPosition(pixels.x, pixels.y, 0.0f);
-	m_labelY->Render();
-
-	pixels = m_mainCamera->ConvertWorldToScreen(m_axes->GetArrowTipPositionZ());
-	m_labelZ->GetTransform().SetPosition(pixels.x, pixels.y, 0.0f);
-	m_labelZ->Render();*/
 
 	for (const auto& object : m_objects)
 	{

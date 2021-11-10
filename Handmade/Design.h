@@ -38,6 +38,9 @@ private:
 	std::unique_ptr<Grid> m_grid;
 	std::unique_ptr<Axes> m_axes;
 
+	std::unique_ptr<Cuboid> m_cuboid;
+	std::unique_ptr<Model> m_model;
+
 	std::unique_ptr<Text> m_topText;
 	std::unique_ptr<Text> m_bottomText;
 	std::unique_ptr<Text> m_axesLabelText;
@@ -57,7 +60,7 @@ private:
 	std::unique_ptr<Audio> m_audio3;*/
 
 	std::unique_ptr<Light> m_light;
-	std::unique_ptr<Model> m_model;
+	
 
 	//std::unique_ptr<Quad> m_quad;
 	//std::unique_ptr<Cuboid> m_cube;
