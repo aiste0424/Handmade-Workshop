@@ -3,6 +3,10 @@
 #include "Screen.h"
 #include "Cuboid.h"
 
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_opengl3.h"
+#include "imgui/imgui_impl_sdl.h"
+
 //======================================================================================================
 bool Design::OnEnter()
 {
@@ -134,7 +138,7 @@ bool Design::OnEnter()
 	//=========================================================================
 
 	Screen::Instance()->SetColor(29U, 29U, 29U);
-
+	
 	return true;
 }
 //======================================================================================================
@@ -185,10 +189,12 @@ State* Design::Update(int deltaTime)
 bool Design::Render()
 {
 
-	Shader& mainShader = *m_mainShader.get();
-	Shader& textShader = *m_textShader.get();
-	Shader& lightShader = *m_lightShader.get();
-	Shader& testShader = *m_testShader.get();
+	auto& mainShader = *m_mainShader.get();
+	auto& textShader = *m_textShader.get();
+	auto& lightShader = *m_lightShader.get();
+	auto& testShader = *m_testShader.get();
+
+	auto resolution = Screen::Instance()->GetResolution();
 
 	mainShader.Use();
 
@@ -222,8 +228,7 @@ bool Design::Render()
 	//==============================================================================
 
 	const auto PADDING = 25.0f;
-	auto resolution = Screen::Instance()->GetResolution();
-
+	
 	textShader.Use();
 
 	m_UICamera->CreateOrthoView();
@@ -233,9 +238,9 @@ bool Design::Render()
 	/*m_topText->GetTransform().SetPosition(resolution.x - m_topText->GetTotalWidth() - PADDING,
 		resolution.y - 50.0f, 0.0f);
 	m_topText->SendToShader(textShader);
-	m_topText->Render(textShader);
+	m_topText->Render(textShader);*/
 
-	m_bottomText->GetTransform().SetPosition(PADDING, PADDING, 0.0f);
+	/*m_bottomText->GetTransform().SetPosition(PADDING, PADDING, 0.0f);
 	m_bottomText->SendToShader(textShader);
 	m_bottomText->Render(textShader);*/
 
@@ -265,6 +270,45 @@ bool Design::Render()
 			object->Render(lightShader);
 		}
 	}
+
+	//==============================================================================
+	//ImGUI UI (WIP)
+	//==============================================================================
+
+	// Start the Dear ImGui frame
+	//ImGui_ImplOpenGL3_NewFrame();
+	//ImGui_ImplSDL2_NewFrame();
+	//ImGui::NewFrame();
+
+	////Begin creates a new window and must have end
+	//ImGui::Begin("A brand new window");
+	//
+	////uncomment to make it live in this window
+	////ImGui::Text("Hello Handmade");  
+	////ImGui::Button("Button");
+	//
+	//ImGui::End();
+	//
+	//ImGui::Button("Button");
+	//
+	//ImGui::Text("Hello Handmade");
+
+	//static float f1 = 0.0f;
+	//static float f2 = 0.0f;
+	//static float f3 = 0.0f;
+	//
+	//ImGui::SliderFloat("Some random data", &f1, 0.0f, 1.0f);
+	//ImGui::SliderFloat("Some more data", &f2, 0.0f, 1.0f);
+	//ImGui::SliderFloat("Useful data", &f3, 0.0f, 1.0f);
+
+	////bool showWindow = false;
+	////ImGui::Checkbox("Check me", &showWindow);
+
+	//ImVec4 color = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
+	//ImGui::ColorEdit3("clear color", (float*)&color);
+
+	//ImGui::Render();
+	//ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 	return true;
 }
