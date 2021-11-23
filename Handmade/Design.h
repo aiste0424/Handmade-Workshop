@@ -39,11 +39,13 @@ private:
 	std::unique_ptr<Axes> m_axes;
 
 	std::unique_ptr<Cuboid> m_cuboid;
-	std::unique_ptr<Model> m_model;
+	std::unique_ptr<Model> m_gecko;
+	std::unique_ptr<Model> m_bed;
 
-	std::unique_ptr<Text> m_topText;
+	//different texts
+	/*std::unique_ptr<Text> m_topText;
 	std::unique_ptr<Text> m_bottomText;
-	std::unique_ptr<Text> m_axesLabelText;
+	std::unique_ptr<Text> m_axesLabelText;*/
 
 	std::unique_ptr<Shader> m_mainShader;
 	std::unique_ptr<Shader> m_textShader;

@@ -95,7 +95,7 @@ bool Design::OnEnter()
 
 	m_axes = std::make_unique<Axes>("Arrow.obj");
 
-	m_topText = std::make_unique<Text>("Quikhand", "Quikhand.ttf", 30);
+	/*m_topText = std::make_unique<Text>("Quikhand", "Quikhand.ttf", 30);
 	m_topText->SetColor(1.0f, 0.0f, 0.196f, 1.0f);
 	m_topText->SetString("Handmade Alpha");
 
@@ -105,18 +105,22 @@ bool Design::OnEnter()
 
 	m_axesLabelText = std::make_unique<Text>("Arial", "Arial.ttf", 66);
 	m_axesLabelText->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
-	m_axesLabelText->SetString("X");
+	m_axesLabelText->SetString("X");*/
 
 	//==========================================================================
 
 	m_light = std::make_unique<Light>(0.0f, 7.5f, 0.0f);
-	m_model = std::make_unique<Model>("Gecko", "Gecko.obj", true);
-	m_model->GetTransform().SetScale(10.0f, 10.0f, 10.0f);
-	m_model->SetColor(1, 0, 1, 1);
+	m_gecko = std::make_unique<Model>("Gecko", "Gecko.obj", true);
+	m_gecko->GetTransform().SetScale(5.0f, 5.0f, 5.0f);
 
 	//=========================================================================
 
 	m_cuboid = std::make_unique<Cuboid>();
+	m_cuboid->GetTransform().SetPosition(2.0f, 0.0f, 2.0f);
+
+	m_bed = std::make_unique<Model>("Bed", "Bed.obj", true);
+	m_bed->GetTransform().SetScale(5.0f, 5.0f, 5.0f);
+	m_bed->GetTransform().SetPosition(-5.0f, 0.0f, 2.0f);
 
 	m_mainCamera = std::make_unique<FreeCamera>();
 	m_mainCamera->SetVelocity(0.0f);
@@ -195,8 +199,7 @@ bool Design::Render()
 	//==============================================================================
 
 	m_grid->Render(mainShader);
-	//m_cuboid->Render(mainShader);
-	m_model->Render(lightShader);
+	m_cuboid->Render(mainShader);
 
 	lightShader.Use();
 	lightShader.SendData("cameraPosition", m_mainCamera->GetTransform().GetPosition());
@@ -207,9 +210,13 @@ bool Design::Render()
 
 	m_axes->GetTransform().SetRotation(m_grid->GetTransform().GetRotation());
 	m_cuboid->GetTransform().SetRotation(m_grid->GetTransform().GetRotation());
-	m_model->GetTransform().SetRotation(m_grid->GetTransform().GetRotation());
-	m_axes->Render(lightShader);
+	m_gecko->GetTransform().SetRotation(m_grid->GetTransform().GetRotation());
+	m_bed->GetTransform().SetRotation(m_grid->GetTransform().GetRotation());
 
+	m_axes->Render(lightShader);
+	m_gecko->Render(lightShader);
+	m_bed->Render(lightShader);
+	
 	//==============================================================================
 	//Text rendering & UI
 	//==============================================================================
@@ -223,16 +230,16 @@ bool Design::Render()
 	m_UICamera->Update(16.0f);
 	m_UICamera->SendToShader(textShader);
 
-	m_topText->GetTransform().SetPosition(resolution.x - m_topText->GetTotalWidth() - PADDING,
+	/*m_topText->GetTransform().SetPosition(resolution.x - m_topText->GetTotalWidth() - PADDING,
 		resolution.y - 50.0f, 0.0f);
 	m_topText->SendToShader(textShader);
 	m_topText->Render(textShader);
 
 	m_bottomText->GetTransform().SetPosition(PADDING, PADDING, 0.0f);
 	m_bottomText->SendToShader(textShader);
-	m_bottomText->Render(textShader);
+	m_bottomText->Render(textShader);*/
 
-	auto labelPosition = m_mainCamera->ConvertWorldToScreen(m_axes->GetArrowTipPositionX());
+	/*auto labelPosition = m_mainCamera->ConvertWorldToScreen(m_axes->GetArrowTipPositionX());
 	m_axesLabelText->IsFirstLetterCentered(true);
 	m_axesLabelText->GetTransform().SetPosition(labelPosition.x, labelPosition.y, 0.0f);
 	m_axesLabelText->SetString("X");
@@ -249,7 +256,7 @@ bool Design::Render()
 	m_axesLabelText->GetTransform().SetPosition(labelPosition.x, labelPosition.y, 0.0f);
 	m_axesLabelText->SendToShader(textShader);
 	m_axesLabelText->SetString("Z");
-	m_axesLabelText->Render(textShader);
+	m_axesLabelText->Render(textShader);*/
 
 	for (const auto& object : m_objects)
 	{
