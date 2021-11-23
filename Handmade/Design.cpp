@@ -2,7 +2,6 @@
 #include "Input.h"
 #include "Screen.h"
 #include "Cuboid.h"
-#include <iostream>
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_opengl3.h"
@@ -120,6 +119,8 @@ bool Design::OnEnter()
 
 	//=========================================================================
 
+	m_cuboid = std::make_unique<Cuboid>();
+	m_cuboid->GetTransform().SetPosition(2.0f, 0.0f, 2.0f);
 
 	m_bed = std::make_unique<Model>("Bed", "Bed.obj", true);
 	m_bed->GetTransform().SetScale(5.0f, 5.0f, 5.0f);
@@ -202,41 +203,9 @@ bool Design::Render()
 	m_mainCamera->SendToShader(mainShader);
 
 	//==============================================================================
-	//ImGUI UI (WIP)
-	//==============================================================================
-	auto mouseMotion = Input::Instance()->GetMouseMotion();
-	// Start the Dear ImGui frame
-	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplSDL2_NewFrame();
-	ImGui::NewFrame();
-
-	//Begin creates a new window and must have end
-	ImGui::Begin("Objects");
-	ImGui::SetWindowPos("Objects", { 0, 0 }, ImGuiCond_Always);
-	ImGui::SetWindowSize("Objects", { 275, 775 }, ImGuiCond_FirstUseEver);
-
-	if (ImGui::Button("Cube"))
-	{
-		m_cuboid = std::make_unique<Cuboid>();
-		m_cuboid->GetTransform().SetPosition(2.0f, 0.0f, 2.0f);
-		m_cuboid->Render(mainShader);
-	}
-
-	ImGui::End();
-
-	ImGui::Begin("Project");
-	ImGui::SetWindowPos("Project", { 0, 775 }, ImGuiCond_Always);
-	ImGui::SetWindowSize("Project", { 400, 300 }, ImGuiCond_Always);
-
-	ImGui::End();
-
-
-	ImGui::Render();
-	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-	//==========================================================
 
 	m_grid->Render(mainShader);
-	
+	m_cuboid->Render(mainShader);
 
 	lightShader.Use();
 	lightShader.SendData("cameraPosition", m_mainCamera->GetTransform().GetPosition());
@@ -302,7 +271,45 @@ bool Design::Render()
 		}
 	}
 
-	
+	//==============================================================================
+	//ImGUI UI (WIP)
+	//==============================================================================
+
+	// Start the Dear ImGui frame
+	//ImGui_ImplOpenGL3_NewFrame();
+	//ImGui_ImplSDL2_NewFrame();
+	//ImGui::NewFrame();
+
+	////Begin creates a new window and must have end
+	//ImGui::Begin("A brand new window");
+	//
+	////uncomment to make it live in this window
+	////ImGui::Text("Hello Handmade");  
+	////ImGui::Button("Button");
+	//
+	//ImGui::End();
+	//
+	//ImGui::Button("Button");
+	//
+	//ImGui::Text("Hello Handmade");
+
+	//static float f1 = 0.0f;
+	//static float f2 = 0.0f;
+	//static float f3 = 0.0f;
+	//
+	//ImGui::SliderFloat("Some random data", &f1, 0.0f, 1.0f);
+	//ImGui::SliderFloat("Some more data", &f2, 0.0f, 1.0f);
+	//ImGui::SliderFloat("Useful data", &f3, 0.0f, 1.0f);
+
+	////bool showWindow = false;
+	////ImGui::Checkbox("Check me", &showWindow);
+
+	//ImVec4 color = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
+	//ImGui::ColorEdit3("clear color", (float*)&color);
+
+	//ImGui::Render();
+	//ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
 	return true;
 }
 //======================================================================================================
