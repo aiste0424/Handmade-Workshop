@@ -6,6 +6,7 @@
 
 #include <memory>
 #include <vector>
+#include <glm.hpp>
 #include "Audio.h"
 #include "Axes.h"
 #include "Cuboid.h"
@@ -19,6 +20,10 @@
 #include "Shader.h"
 #include "State.h"
 #include "Text.h"
+
+const auto MINOR = 0.2f;
+const auto MAJOR = 0.8f;
+const auto UI_PADDING = 2.0f;
 
 class Design : public State
 {
@@ -35,26 +40,28 @@ public:
 
 private:
 
+	void RenderConsoleWindow();
+	void RenderPropertiesWindow();
+
+	glm::ivec2 m_resolution;
+	GLint m_minorWidth;
+	GLint m_majorWidth;
+	GLint m_minorHeight;
+	GLint m_majorHeight;
+
 	std::unique_ptr<Grid> m_grid;
 	std::unique_ptr<Axes> m_axes;
 
-	std::unique_ptr<Cuboid> m_cuboid;
-	std::unique_ptr<Model> m_gecko;
-	std::unique_ptr<Model> m_bed;
-
-	//different texts
-	/*std::unique_ptr<Text> m_topText;
+	std::unique_ptr<Text> m_topText;
 	std::unique_ptr<Text> m_bottomText;
-	std::unique_ptr<Text> m_axesLabelText;*/
+	std::unique_ptr<Text> m_axesLabelText;
 
 	std::unique_ptr<Shader> m_mainShader;
 	std::unique_ptr<Shader> m_textShader;
 	std::unique_ptr<Shader> m_lightShader;
-
 	std::unique_ptr<Shader> m_testShader;
 
-	std::unique_ptr<FreeCamera> m_UICamera;
-	std::unique_ptr<FreeCamera> m_mainCamera;
+	std::unique_ptr<FreeCamera> m_sceneCamera;
 
 	//For current testing===============================================
 	/*std::unique_ptr<Audio> m_audio1;
@@ -62,7 +69,7 @@ private:
 	std::unique_ptr<Audio> m_audio3;*/
 
 	std::unique_ptr<Light> m_light;
-	
+	std::unique_ptr<Model> m_model;
 
 	//std::unique_ptr<Quad> m_quad;
 	//std::unique_ptr<Cuboid> m_cube;
