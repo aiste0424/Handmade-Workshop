@@ -239,11 +239,11 @@ bool Design::Render()
 
 	//Console viewport
 	SetViewport(glm::ivec4(0, 0, m_majorWidth, m_minorHeight),
-		glm::uvec4(255U, 200U, 0U, 1U));
+		glm::uvec4(0U, 0U, 0U, 1U));
 
 	//Properties viewport
 	SetViewport(glm::ivec4(m_majorWidth, 0, m_minorWidth, m_resolution.y),
-		glm::uvec4(0U, 144U, 255U, 1U));
+		glm::uvec4(32U, 32U, 32U, 1U));
 
 	//Scene viewport
 	m_sceneCamera->SetViewport(0, m_minorHeight, m_majorWidth, m_majorHeight);
