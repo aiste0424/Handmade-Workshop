@@ -179,6 +179,7 @@
     <ClCompile Include="OrbitCamera.cpp" />
     <ClCompile Include="Plane.cpp" />
     <ClCompile Include="Point.cpp" />
+    <ClCompile Include="Pyramid.cpp" />
     <ClCompile Include="Quad.cpp" />
     <ClCompile Include="Raycast.cpp" />
     <ClCompile Include="RigidBody.cpp" />
@@ -226,6 +227,7 @@
     <ClInclude Include="OrbitCamera.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Point.h" />
+    <ClInclude Include="Pyramid.h" />
     <ClInclude Include="Quad.h" />
     <ClInclude Include="Raycast.h" />
     <ClInclude Include="RigidBody.h" />
